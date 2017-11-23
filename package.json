@@ -38,6 +38,7 @@
     "objectbox": "^0.3.0",
     "proving": "^0.1.0",
     "q": "^1.4.1",
+    "throat": "^4.1.0",
     "zcl-id": "https://github.com/HollyAssistTeam/zcl-id.git",
     "zcl-packet": "https://github.com/HollyAssistTeam/zcl-packet.git",
     "ziee": "^0.3.0",
