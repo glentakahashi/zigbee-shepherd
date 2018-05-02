@@ -43,7 +43,8 @@
     "zcl-packet": "https://github.com/HalleyAssist/zcl-packet.git",
     "ziee": "^0.3.0",
     "zive": "^0.2.2",
-    "zstack-constants": "^0.2.0"
+    "zstack-constants": "^0.2.0",
+    "mutex-promise": "^0.1.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
