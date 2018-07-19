@@ -1,6 +1,10 @@
 var EventEmitter = require('events'),
     controller = new EventEmitter();
 
+controller.limitConcurrency = function(fn) {
+    return fn
+}
+
 var sinon = require('sinon'),
     expect = require('chai').expect,
     Q = require('q');
