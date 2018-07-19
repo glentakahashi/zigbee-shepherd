@@ -2,7 +2,8 @@ var Q = require('q'),
     sinon = require('sinon'),
     expect = require('chai').expect,
     EventEmitter = require('events'),
-    Controller = require('../lib/components/controller');
+    Controller = require('../lib/components/controller'),
+    ObjectBox = require('objectbox');
 
 var Device  = require('../lib/model/device'),
     Endpoint  = require('../lib/model/endpoint'),
@@ -469,6 +470,10 @@ describe('Functional Check', function () {
         shepherd._findDevByAddr = function () {
             return;
         };
+        shepherd._registerDev = function () {
+            return;
+        };
+        shepherd._devbox = new ObjectBox("/tmp/devbox.db");
 
         controller = new Controller(shepherd, { path: '/dev/ttyACM0' });
         controller._coord = coordDev;

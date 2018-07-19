@@ -28,7 +28,8 @@ var dev1 = new Device({
     ieeeAddr: '0x00137a00000161f2',
     nwkAddr: 100,
     manufId: 10,
-    epList: [ 1 ]
+    epList: [ 1 ],
+    incomplete: false
 });
 
 var zApp = new Zive({ profId: 0x0104, devId: 6 }, new Ziee());
@@ -334,7 +335,7 @@ describe('Top Level of Tests', function () {
                     expect(devList[0].status).to.be.equal('offline');
                     done();
                 }).fail(function (err) {
-                    console.log(err);
+                    done(err)
                 }).done();
             });
         });
@@ -404,34 +405,6 @@ describe('Top Level of Tests', function () {
                         requestStub.restore();
                         done();
                     }
-                });
-            });
-        });
-
-        describe('#.acceptDevIncoming', function () {
-            this.timeout(60000);
-
-            it('should fire incoming message and get a new device', function (done) {
-                var acceptDevIncomingStub = sinon.stub(shepherd, 'acceptDevIncoming', function (devInfo, cb) {
-                    setTimeout(function () {
-                        var accepted = true;
-                        cb(null, accepted);
-                    }, 6000);
-                });
-
-                shepherd.once('ind:incoming', function (dev) {
-                    acceptDevIncomingStub.restore();
-                    if (dev.getIeeeAddr() === '0x00124b000bb55881')
-                        done();
-                });
-
-                shepherd.controller.emit('ZDO:devIncoming', {
-                    type: 1,
-                    ieeeAddr: '0x00124b000bb55881',
-                    nwkAddr: 100,
-                    manufId: 10,
-                    epList: [],
-                    endpoints: []
                 });
             });
         });
