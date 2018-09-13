@@ -112,8 +112,8 @@ controller.limitConcurrency = function(fn) {
 };
 
 controller._indirect_send = function(addr, fn){
-    fn()
-    return {done: function(){}}
+    var result = fn()
+    return {done: function(){}, result: result}
 };
 
 controller.getShepherd = function(){};
@@ -709,7 +709,7 @@ describe('Module Methods Check', function() {
                     return deferred.promise.nodeify(callback);
             });
 
-            af.send(rmEp1, rmEp1, 3, new Buffer([ 1, 2 ]), { timeout: 3000 }, function (err, rsp) {
+            af.send(rmEp1, rmEp1, 3, new Buffer([ 1, 2 ]), { timeout: 300 }, function (err, rsp) {
                 if (err) {
                     done();
                 }
@@ -872,7 +872,7 @@ describe('Module Methods Check', function() {
                     return deferred.promise.nodeify(callback);
             });
 
-            af.send(loEp8, rmEp1, 3, new Buffer([ 1, 2 ]), { timeout: 3000 }, function (err, rsp) {
+            af.send(loEp8, rmEp1, 3, new Buffer([ 1, 2 ]), { timeout: 300 }, function (err, rsp) {
                 if (err) {
                     done();
                 }
@@ -1037,7 +1037,7 @@ describe('Module Methods Check', function() {
                     return deferred.promise.nodeify(callback);
             });
 
-            af.sendExt(loEp8, 2, 3, 12, new Buffer([ 1, 2 ]), { timeout: 3000 }, function (err, rsp) {
+            af.sendExt(loEp8, 2, 3, 12, new Buffer([ 1, 2 ]), { timeout: 300 }, function (err, rsp) {
                 if (err)
                     done();
             });

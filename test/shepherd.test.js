@@ -198,7 +198,7 @@ describe('Top Level of Tests', function () {
 
     describe('Functional Check', function () {
         var shepherd;
-        before(function () {
+        beforeEach(function () {
             shepherd = new Shepherd('/dev/ttyUSB0', { dbPath: __dirname + '/database/dev1.db' });
 
             shepherd.controller.request = function (subsys, cmdId, valObj, callback) {
@@ -412,56 +412,44 @@ describe('Top Level of Tests', function () {
         describe('#.reset', function () {
             this.timeout(20000);
             it('should reset - soft', function (done) {
-                shepherd.start = shepherd.stop = function(callback){}
                 var stopStub = sinon.stub(shepherd, 'stop', function (callback) {
-                        var deferred = Q.defer();
-                        deferred.resolve();
-                        return deferred.promise.nodeify(callback);
-                    }),
-                    startStub = sinon.stub(shepherd, 'start', function (callback) {
-                        var deferred = Q.defer();
-                        deferred.resolve();
-                        return deferred.promise.nodeify(callback);
-                    });
-
-                shepherd.controller.once('SYS:resetInd', function () {
-                    setTimeout(function () {
-                        stopStub.restore();
-                        startStub.restore();
-                        done();
-                    }, 100);
+                    var deferred = Q.defer();
+                    deferred.resolve();
+                    shepherd.controller.emit('SYS:resetInd', {});
+                    return deferred.promise.nodeify(callback);
+                }),
+                startStub = sinon.stub(shepherd, 'start', function (callback) {
+                    var deferred = Q.defer();
+                    deferred.resolve();
+                    done()
+                    return deferred.promise.nodeify(callback);
                 });
+
 
                 shepherd.reset('soft').done();
             });
 
             it('should reset - hard', function (done) {
-                shepherd.start = shepherd.stop = function(callback){}
                 var stopStub = sinon.stub(shepherd, 'stop', function (callback) {
                         var deferred = Q.defer();
                         deferred.resolve();
+                        shepherd.controller.emit('SYS:resetInd', {});
                         return deferred.promise.nodeify(callback);
                     }),
                     startStub = sinon.stub(shepherd, 'start', function (callback) {
                         var deferred = Q.defer();
                         deferred.resolve();
+                        done()
                         return deferred.promise.nodeify(callback);
                     });
 
-                shepherd.controller.once('SYS:resetInd', function () {
-                    setTimeout(function () {
-                        stopStub.restore();
-                        startStub.restore();
-                        done();
-                    }, 100);
-                });
 
                 shepherd.reset('hard').done();
             });
         });
 
         describe('#.stop', function () {
-            it('should stop ok, permitJoin 0 should be fired, _enabled should be false', function (done) {
+            it('should stop ok, _enabled should be false', function (done) {
                 var joinFired = false,
                     stopCalled = false,
                     closeStub = sinon.stub(shepherd.controller, 'close', function (callback) {
@@ -471,14 +459,6 @@ describe('Top Level of Tests', function () {
 
                         return deferred.promise.nodeify(callback);
                     });
-
-                shepherd.once('permitJoining', function (joinTime) {
-                    joinFired = true;
-                    if (joinTime === 0 && !shepherd._enabled && stopCalled && joinFired){
-                        closeStub.restore();
-                        done();
-                    }
-                });
 
                 shepherd.stop(function (err) {
                     stopCalled = true;
