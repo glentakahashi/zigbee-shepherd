@@ -1,13 +1,6 @@
 var EventEmitter = require('events'),
     controller = new EventEmitter();
 
-controller.limitConcurrency = function(fn) {
-    return fn
-}
-controller._indirect_send = function(addr, fn){
-    fn()
-    return {done: function(){}}
-}
 var sinon = require('sinon'),
     expect = require('chai').expect,
     Q = require('q');
@@ -113,6 +106,17 @@ controller.findEndpoint = function (srcaddr, srcendpoint) {
             return loEp8;
     }
 };
+
+controller.limitConcurrency = function(fn) {
+    return fn
+};
+
+controller._indirect_send = function(addr, fn){
+    fn()
+    return {done: function(){}}
+};
+
+controller.getShepherd = function(){};
 
 function fireFakeCnf(status, epid, transid) {
     var afEventCnf = 'AF:dataConfirm:' + epid + ':' + transid;
