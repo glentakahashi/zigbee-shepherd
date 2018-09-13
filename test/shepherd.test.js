@@ -412,6 +412,7 @@ describe('Top Level of Tests', function () {
         describe('#.reset', function () {
             this.timeout(20000);
             it('should reset - soft', function (done) {
+                shepherd.start = shepherd.stop = function(callback){}
                 var stopStub = sinon.stub(shepherd, 'stop', function (callback) {
                         var deferred = Q.defer();
                         deferred.resolve();
@@ -435,6 +436,7 @@ describe('Top Level of Tests', function () {
             });
 
             it('should reset - hard', function (done) {
+                shepherd.start = shepherd.stop = function(callback){}
                 var stopStub = sinon.stub(shepherd, 'stop', function (callback) {
                         var deferred = Q.defer();
                         deferred.resolve();
