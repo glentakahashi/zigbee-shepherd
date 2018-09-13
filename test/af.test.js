@@ -4,7 +4,10 @@ var EventEmitter = require('events'),
 controller.limitConcurrency = function(fn) {
     return fn
 }
-
+controller._indirect_send = function(addr, fn){
+    fn()
+    return {done: function(){}}
+}
 var sinon = require('sinon'),
     expect = require('chai').expect,
     Q = require('q');
